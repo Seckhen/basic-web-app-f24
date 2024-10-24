@@ -12,5 +12,13 @@ export default function QueryProcessor(query: string): string {
     //TODO update the corresponding test case in __tests__
     return ( "saandrad" );
   }
+
+  if (query.toLowerCase().includes("what is your name")) {
+    //TODO add your Andrew ID below
+    //TODO update the corresponding test case in __tests__
+    return ( "f5c2d617" );
+  }
+
+
   return "";
 }
