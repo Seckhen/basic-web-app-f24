@@ -46,12 +46,11 @@ export default function QueryProcessor(query: string): string {
         .replace(/divided by/gi, "/")
         .replace(/to the power of/gi, "**");
 
-      // Remove any non-mathematical characters
+      // Remove any non-mathematical characters except for parentheses and spaces
       expression = expression.replace(/[^0-9+\-*/().\s**]/g, "");
 
       try {
-        // Use Function constructor to evaluate the expression safely
-        // Note: In a controlled environment; avoid in production code
+        // Evaluate the expression
         const result = new Function(`return (${expression});`)();
         return result.toString();
       } catch (error) {
