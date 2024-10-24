@@ -62,6 +62,21 @@ export default function QueryProcessor(query: string): string {
     return computeMultiplication();
   }
 
+  function computeSubtraction(): string {
+    const matches: string[] | null = query.match(/\d+/g);
+    if (matches && matches.length === 2) {
+      const numbers = matches.map(Number);
+      const difference = numbers[0] - numbers[1];
+      return difference.toString();
+    } else {
+      return "Please provide exactly two numbers to subtract.";
+    }
+  }
+
+  if (query.toLowerCase().includes("what is") && query.toLowerCase().includes("minus")) {
+    return computeSubtraction();
+  }
+
   function findSquareAndCubeNumbers(): string {
     const matches: string[] | null = query.match(/\d+/g);
     if (matches && matches.length > 0) {
@@ -81,7 +96,11 @@ export default function QueryProcessor(query: string): string {
     }
   }
 
-  if (query.toLowerCase().includes("which of the following numbers is both a square and a cube")) {
+  if (
+    query
+      .toLowerCase()
+      .includes("which of the following numbers is both a square and a cube")
+  ) {
     return findSquareAndCubeNumbers();
   }
 
