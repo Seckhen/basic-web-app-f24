@@ -18,11 +18,9 @@ export default function QueryProcessor(query: string): string {
   }
 
   function getLargestNumber(): string {
-    // Extract numbers using regex
     const matches: string[] | null = query.match(/\d+/g);
     if (matches && matches.length > 0) {
       const numbers = matches.map(Number);
-      // Find the maximum number
       const maxNumber = Math.max(...numbers);
       return maxNumber.toString();
     } else {
@@ -35,7 +33,6 @@ export default function QueryProcessor(query: string): string {
   }
 
   function computeAddition(): string {
-    // Extract numbers using regex
     const matches: string[] | null = query.match(/\d+/g);
     if (matches && matches.length > 0) {
       const numbers = matches.map(Number);
@@ -51,7 +48,6 @@ export default function QueryProcessor(query: string): string {
   }
 
   function computeMultiplication(): string {
-    // Extract numbers using regex
     const matches: string[] | null = query.match(/\d+/g);
     if (matches && matches.length > 0) {
       const numbers = matches.map(Number);
@@ -67,7 +63,6 @@ export default function QueryProcessor(query: string): string {
   }
 
   function findSquareAndCubeNumbers(): string {
-    // Extract numbers using regex
     const matches: string[] | null = query.match(/\d+/g);
     if (matches && matches.length > 0) {
       const numbers = matches.map(Number);
@@ -88,6 +83,37 @@ export default function QueryProcessor(query: string): string {
 
   if (query.toLowerCase().includes("which of the following numbers is both a square and a cube")) {
     return findSquareAndCubeNumbers();
+  }
+
+  function findPrimeNumbers(): string {
+    const matches: string[] | null = query.match(/\d+/g);
+    if (matches && matches.length > 0) {
+      const numbers = matches.map(Number);
+      const primes = numbers.filter(isPrime);
+      if (primes.length > 0) {
+        return primes.join(", ");
+      } else {
+        return "No prime numbers found.";
+      }
+    } else {
+      return "No numbers found in the query.";
+    }
+  }
+
+  function isPrime(n: number): boolean {
+    if (n <= 1) return false;
+    if (n <= 3) return true;
+
+    if (n % 2 === 0 || n % 3 === 0) return false;
+
+    for (let i = 5; i * i <= n; i += 6) {
+      if (n % i === 0 || n % (i + 2) === 0) return false;
+    }
+    return true;
+  }
+
+  if (query.toLowerCase().includes("which of the following numbers are primes")) {
+    return findPrimeNumbers();
   }
 
   return "";
