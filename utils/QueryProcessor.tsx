@@ -32,71 +32,38 @@ export default function QueryProcessor(query: string): string {
     return getLargestNumber();
   }
 
-  function computeAddition(): string {
-    const matches: string[] | null = query.match(/-?\d+/g);
-    if (matches && matches.length > 0) {
-      const numbers = matches.map(Number);
-      const sum = numbers.reduce((a, b) => a + b, 0);
-      return sum.toString();
+  function computeExpression(): string {
+    // Extract the mathematical expression from the query
+    const expressionMatch = query.match(/what is (.+)/i);
+    if (expressionMatch && expressionMatch[1]) {
+      let expression = expressionMatch[1];
+
+      // Replace words with mathematical operators
+      expression = expression
+        .replace(/plus/gi, "+")
+        .replace(/minus/gi, "-")
+        .replace(/multiplied by|times/gi, "*")
+        .replace(/divided by/gi, "/")
+        .replace(/to the power of/gi, "**");
+
+      // Remove any non-mathematical characters
+      expression = expression.replace(/[^0-9+\-*/().\s**]/g, "");
+
+      try {
+        // Use Function constructor to evaluate the expression safely
+        // Note: In a controlled environment; avoid in production code
+        const result = new Function(`return (${expression});`)();
+        return result.toString();
+      } catch (error) {
+        return "Error evaluating the expression.";
+      }
     } else {
-      return "No numbers found to add.";
+      return "No valid expression found.";
     }
   }
 
-  if (query.toLowerCase().includes("what is") && query.toLowerCase().includes("plus")) {
-    return computeAddition();
-  }
-
-  function computeMultiplication(): string {
-    const matches: string[] | null = query.match(/-?\d+/g);
-    if (matches && matches.length > 0) {
-      const numbers = matches.map(Number);
-      const product = numbers.reduce((a, b) => a * b, 1);
-      return product.toString();
-    } else {
-      return "No numbers found to multiply.";
-    }
-  }
-
-  if (
-    query.toLowerCase().includes("what is") &&
-    (query.toLowerCase().includes("multiplied by") || query.toLowerCase().includes("times"))
-  ) {
-    return computeMultiplication();
-  }
-
-  function computeSubtraction(): string {
-    const matches: string[] | null = query.match(/-?\d+/g);
-    if (matches && matches.length === 2) {
-      const numbers = matches.map(Number);
-      const difference = numbers[0] - numbers[1];
-      return difference.toString();
-    } else {
-      return "Please provide exactly two numbers to subtract.";
-    }
-  }
-
-  if (query.toLowerCase().includes("what is") && query.toLowerCase().includes("minus")) {
-    return computeSubtraction();
-  }
-
-  function computePower(): string {
-    const matches: string[] | null = query.match(/\d+/g);
-    if (matches && matches.length === 2) {
-      const base = BigInt(matches[0]);
-      const exponent = BigInt(matches[1]);
-      const result = base ** exponent;
-      return result.toString();
-    } else {
-      return "Please provide a base and an exponent.";
-    }
-  }
-
-  if (
-    query.toLowerCase().includes("what is") &&
-    (query.toLowerCase().includes("to the power of") || query.toLowerCase().includes("^"))
-  ) {
-    return computePower();
+  if (query.toLowerCase().startsWith("what is")) {
+    return computeExpression();
   }
 
   function findSquareAndCubeNumbers(): string {
