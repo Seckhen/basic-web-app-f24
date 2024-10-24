@@ -58,7 +58,10 @@ export default function QueryProcessor(query: string): string {
     }
   }
 
-  if (query.toLowerCase().includes("what is") && query.toLowerCase().includes("multiplied by")) {
+  if (
+    query.toLowerCase().includes("what is") &&
+    (query.toLowerCase().includes("multiplied by") || query.toLowerCase().includes("times"))
+  ) {
     return computeMultiplication();
   }
 
@@ -75,6 +78,25 @@ export default function QueryProcessor(query: string): string {
 
   if (query.toLowerCase().includes("what is") && query.toLowerCase().includes("minus")) {
     return computeSubtraction();
+  }
+
+  function computePower(): string {
+    const matches: string[] | null = query.match(/\d+/g);
+    if (matches && matches.length === 2) {
+      const base = Number(matches[0]);
+      const exponent = Number(matches[1]);
+      const result = Math.pow(base, exponent);
+      return result.toString();
+    } else {
+      return "Please provide a base and an exponent.";
+    }
+  }
+
+  if (
+    query.toLowerCase().includes("what is") &&
+    (query.toLowerCase().includes("to the power of") || query.toLowerCase().includes("^"))
+  ) {
+    return computePower();
   }
 
   function findSquareAndCubeNumbers(): string {
