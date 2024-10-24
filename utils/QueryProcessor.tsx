@@ -33,7 +33,7 @@ export default function QueryProcessor(query: string): string {
   }
 
   function computeAddition(): string {
-    const matches: string[] | null = query.match(/\d+/g);
+    const matches: string[] | null = query.match(/-?\d+/g);
     if (matches && matches.length > 0) {
       const numbers = matches.map(Number);
       const sum = numbers.reduce((a, b) => a + b, 0);
@@ -48,7 +48,7 @@ export default function QueryProcessor(query: string): string {
   }
 
   function computeMultiplication(): string {
-    const matches: string[] | null = query.match(/\d+/g);
+    const matches: string[] | null = query.match(/-?\d+/g);
     if (matches && matches.length > 0) {
       const numbers = matches.map(Number);
       const product = numbers.reduce((a, b) => a * b, 1);
@@ -66,7 +66,7 @@ export default function QueryProcessor(query: string): string {
   }
 
   function computeSubtraction(): string {
-    const matches: string[] | null = query.match(/\d+/g);
+    const matches: string[] | null = query.match(/-?\d+/g);
     if (matches && matches.length === 2) {
       const numbers = matches.map(Number);
       const difference = numbers[0] - numbers[1];
@@ -83,9 +83,9 @@ export default function QueryProcessor(query: string): string {
   function computePower(): string {
     const matches: string[] | null = query.match(/\d+/g);
     if (matches && matches.length === 2) {
-      const base = Number(matches[0]);
-      const exponent = Number(matches[1]);
-      const result = Math.pow(base, exponent);
+      const base = BigInt(matches[0]);
+      const exponent = BigInt(matches[1]);
+      const result = base ** exponent;
       return result.toString();
     } else {
       return "Please provide a base and an exponent.";
